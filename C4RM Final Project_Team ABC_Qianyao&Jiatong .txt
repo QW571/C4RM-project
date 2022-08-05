@@ -1,0 +1,13 @@
+Team ABC - Qianyao Wu & Jiatong Liu
+C4RM Final Project - Covid Cases
+
+Our project aims to study trends in daily new cases of COVID-19 infections, vaccinations, average temperatures, and the relationship between them in New York City. The period is from January 1 to July 31, 2022.
+On the Centers for Disease Control and Prevention (CDC) website, we found data of daily new cases of COVID-19 and vaccinations in NYC. Daily temperatures for NYC were available on the National Weather Service website. All data was filtered, consolidated into a new Excel file and converted to a csv file.
+
+Here are the reference links for the data:
+(1) https://covid.cdc.gov/covid-data-tracker/#vaccination-trends
+(2) https://covid.cdc.gov/covid-data-tracker/#trends_dailycases_select_00
+(3) https://www.weather.gov/wrh/climate?wfo=okx
+
+Here is the link of Github repository:
+https://github.com/QW571/C4RM-project
