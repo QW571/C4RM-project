@@ -1,0 +1,85 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+### Data Preparation
+```{r}
+library(readr)
+library(sqldf)
+library(ggplot2)
+options(sqldf.driver = "SQLite")
+Covids <- read_csv("NYCovidCases.csv",show_col_types = FALSE)
+CovidRecord <- sqldf('select "Date" as Date, "New Cases" as NewCases, "Percent of Total Fully Vaccinated Pop with Booster Dose (%)" as VaccinatedRate, "Average Temperature (°F)" as AverageTemperature from Covids')
+# Trans DateChar into Date format
+CovidRecord$Date = as.Date(CovidRecord$Date)
+CovidRecord
+```
+### Show Data
+```{r}
+# Basic line plot with points
+ggplot(data=CovidRecord, mapping = aes(x=Date, y=NewCases, group=1)) +
+  geom_line()+
+  geom_point()+
+  xlab('Month')+
+  ylab('NewCases')
+```
+```{r}
+ggplot(data=CovidRecord, mapping = aes(x=Date, y=VaccinatedRate, group=1)) +
+  geom_line(linetype = "dashed")+
+  geom_point()+
+  xlab('Month')+
+  ylab('Fully Vaccinated Rate(%)')
+```
+```{r}
+ggplot(data=CovidRecord, mapping = aes(x=Date, y=AverageTemperature, group=1)) +
+  geom_line(linetype = "dashed")+
+  geom_point()+
+  xlab('Month')+
+  ylab('Average Temperature (°F)')
+```
+### Build multivariate linear models
+```{r}
+fit <- lm(NewCases ~ AverageTemperature+VaccinatedRate, CovidRecord)
+summary(fit)
+```
+### Model accuracy assessment
+```{r}
+accuracy(fit)
+```
+```{r}
+fit <- lm(CovidRecord$NewCases ~ poly(CovidRecord$VaccinatedRate, 3) )
+summary(fit)
+accuracy(fit)
+```
+```{r}
+fit <- lm(CovidRecord$NewCases ~ poly(CovidRecord$AverageTemperature, 3) )
+summary(fit)
+accuracy(fit)
+```
+```{r}
+library(forecast)
+fit <- ets(CovidRecord$NewCases, model="ANN")
+summary(fit)
+```
+```{r}
+forecast(fit,100)
+plot(forecast(fit,100))
+```
+```{r}
+accuracy(fit)
+```
+```{r}
+library(forecast)
+fit <- ets(CovidRecord$NewCases, model="AAN")
+summary(fit)
+```
+```{r}
+forecast(fit,100)
+plot(forecast(fit,100))
+```
+```{r}
+accuracy(fit)
+```
+
+
+
